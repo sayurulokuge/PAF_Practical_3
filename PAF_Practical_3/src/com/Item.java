@@ -34,7 +34,9 @@ public class Item {
 			}
 			
 			// creating a prepared statement
-			String query = " insert into items(`itemID`,`itemCode`,`itemName`,`itemPrice`,`itemDesc`)" + " values (?, ?, ?, ?, ?)";
+			String query = " insert into items(`itemID`,`itemCode`,`itemName`,`itemPrice`,`itemDesc`)"
+					+ " values (?, ?, ?, ?, ?)";
+			
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			
 			// binding values
@@ -56,5 +58,66 @@ public class Item {
 		
 		return output;
 	}
+	
+	public String readItems() {
+		String output = "";
+		
+		try {
+			Connection con = connect();
+			
+			if (con == null) {
+				
+				return "Error while connecting to the database for reading.";
+			}
+			
+			// Preparing the table to be displayed
+			output = "<table border='1'><tr><th>Item Code</th>"
+					+ "<th>Item Name</th><th>Item Price</th>"
+					+ "<th>Item Description</th>"
+					+ "<th>Update</th><th>Remove</th></tr>";
+			
+			String query = "select * from items";
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query); 
+			
+			// iterate the rows in the table
+			while (rs.next()) {
+				
+				String itemID = Integer.toString(rs.getInt("itemID"));
+				String itemCode = rs.getString("itemCode");
+				String itemName = rs.getString("itemName");
+				String itemPrice = Double.toString(rs.getDouble("itemPrice"));
+				String itemDesc = rs.getString("itemDesc");
+				
+				// Add a row into the table
+				output += "<tr><td>" + itemCode + "</td>";
+				output += "<td>" + itemName + "</td>";
+				output += "<td>" + itemPrice + "</td>"; 
+				output += "<td>" + itemDesc + "</td>";
+				
+				// buttons
+				output += "<td><input name='btnUpdate' "
+						+ " type='button' value='Update'></td>"
+						+ "<td><form method='post' action='items.jsp'>"
+						+ "<input name='btnRemove' "
+						+ " type='submit' value='Remove'>"
+						+ "<input name='itemID' type='hidden' "
+						+ " value='" + itemID + "'>" + "</form></td></tr>";
+			}
+			
+			con.close();
+			
+			// Complete the table
+			output += "</table>";
+			
+		} catch (Exception e) {
+			 output = "Error while reading the items.";
+			 System.err.println(e.getMessage());
+		}
+		
+		return output; 
+	}
 }	
+
+
 
