@@ -9,7 +9,7 @@ public class Item {
 	 try
 	 {
 	 Class.forName("com.mysql.jdbc.Driver");
-	 con= DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/test", "root", "");
+	 con= DriverManager.getConnection("jdbc:mysql://localhost/paf_lab_3", "root", "");
 	 
 	 //To test the connection
 	 System.out.print("Successfully connected");
@@ -98,7 +98,7 @@ public class Item {
 				// buttons
 				output += "<td><input name='btnUpdate' "
 						+ " type='button' value='Update'></td>"
-						+ "<td><form method='post' action='items.jsp'>"
+						+ "<td><form method='post' action='Items.jsp'>"
 						+ "<input name='btnRemove' "
 						+ " type='submit' value='Remove'>"
 						+ "<input name='itemID' type='hidden' "
